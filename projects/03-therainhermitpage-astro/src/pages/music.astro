@@ -1,0 +1,265 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import MusicPlayer from '../components/MusicPlayer.tsx';
+---
+
+<Layout>
+	<Navigation currentPage="music" />
+	
+	<main class="music-page">
+		<div class="container">
+			<header class="page-header">
+				<h1 class="page-title">
+					<span class="title-icon">🎵</span>
+					Music
+				</h1>
+				<p class="page-description">
+					Dive into my musical journey where electronic beats meet the rhythm of falling rain. 
+					Each track tells a story through sound, blending digital precision with the organic flow of a storm.
+				</p>
+			</header>
+
+			<section class="player-section">
+				<MusicPlayer client:load />
+			</section>
+
+			<section class="albums-section">
+				<h2 class="section-title">Storm Sessions</h2>
+				<div class="albums-grid">
+					<div class="album-card">
+						<div class="album-cover">
+							<div class="cover-placeholder">🌧️</div>
+						</div>
+						<div class="album-info">
+							<h3 class="album-title">Midnight Rainfall</h3>
+							<p class="album-year">2024</p>
+							<p class="album-description">
+								An ambient journey through synthesized storms and ethereal precipitation soundscapes.
+							</p>
+						</div>
+					</div>
+					<div class="album-card">
+						<div class="album-cover">
+							<div class="cover-placeholder">⚡</div>
+						</div>
+						<div class="album-info">
+							<h3 class="album-title">Thunder Code</h3>
+							<p class="album-year">2023</p>
+							<p class="album-description">
+								Where programming meets composition - algorithmic music generation in the storm.
+							</p>
+						</div>
+					</div>
+					<div class="album-card">
+						<div class="album-cover">
+							<div class="cover-placeholder">🌙</div>
+						</div>
+						<div class="album-info">
+							<h3 class="album-title">Nocturnal Pixels</h3>
+							<p class="album-year">2023</p>
+							<p class="album-description">
+								Retro-inspired electronic music with modern production, recorded during rainy nights.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="equipment-section">
+				<h2 class="section-title">Storm Studio</h2>
+				<div class="equipment-grid">
+					<div class="equipment-item">
+						<h3>Digital Audio Workstation</h3>
+						<p>Ableton Live Suite for composition during midnight storms</p>
+					</div>
+					<div class="equipment-item">
+						<h3>Synthesizers</h3>
+						<p>Moog Subsequent 37, Arturia MiniLab, rain-inspired VSTs</p>
+					</div>
+					<div class="equipment-item">
+						<h3>Recording</h3>
+						<p>Audio-Technica AT2020, Focusrite Scarlett, field recordings</p>
+					</div>
+					<div class="equipment-item">
+						<h3>Monitoring</h3>
+						<p>KRK Rokit 5 G4 studio monitors, Audio-Technica ATH-M50x</p>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.music-page {
+		padding-top: 64px;
+		min-height: 100vh;
+		background: 
+			radial-gradient(circle at 20% 80%, rgba(71, 85, 105, 0.3) 0%, transparent 50%),
+			radial-gradient(circle at 80% 20%, rgba(51, 65, 85, 0.3) 0%, transparent 50%),
+			linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+	}
+
+	.page-header {
+		text-align: center;
+		padding: calc(var(--spacing-unit) * 8) 0;
+	}
+
+	.page-title {
+		font-size: 3rem;
+		font-weight: 700;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: calc(var(--spacing-unit) * 2);
+		text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	}
+
+	.title-icon {
+		font-size: 3rem;
+		filter: drop-shadow(0 0 10px rgba(148, 163, 184, 0.3));
+	}
+
+	.page-description {
+		font-size: 1.25rem;
+		color: #cbd5e1;
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.player-section {
+		margin-bottom: calc(var(--spacing-unit) * 10);
+	}
+
+	.section-title {
+		font-size: 2rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) * 4);
+		text-align: center;
+		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	}
+
+	.albums-section {
+		margin-bottom: calc(var(--spacing-unit) * 10);
+	}
+
+	.albums-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: calc(var(--spacing-unit) * 3);
+	}
+
+	.album-card {
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-radius: 16px;
+		padding: calc(var(--spacing-unit) * 3);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		transition: all 0.3s ease;
+		border: 1px solid var(--glass-border);
+	}
+
+	.album-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+		border-color: rgba(148, 163, 184, 0.4);
+	}
+
+	.album-cover {
+		width: 100%;
+		height: 200px;
+		border-radius: 12px;
+		background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
+
+	.cover-placeholder {
+		font-size: 4rem;
+		color: white;
+		filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+	}
+
+	.album-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) / 2);
+	}
+
+	.album-year {
+		color: var(--color-accent);
+		font-weight: 500;
+		margin-bottom: calc(var(--spacing-unit));
+	}
+
+	.album-description {
+		color: #cbd5e1;
+		line-height: 1.5;
+	}
+
+	.equipment-section {
+		margin-bottom: calc(var(--spacing-unit) * 8);
+	}
+
+	.equipment-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: calc(var(--spacing-unit) * 2);
+	}
+
+	.equipment-item {
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-radius: 12px;
+		padding: calc(var(--spacing-unit) * 2);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		border: 1px solid var(--glass-border);
+		transition: all 0.3s ease;
+	}
+
+	.equipment-item:hover {
+		transform: translateY(-2px);
+		border-color: rgba(148, 163, 184, 0.3);
+	}
+
+	.equipment-item h3 {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) / 2);
+	}
+
+	.equipment-item p {
+		color: #cbd5e1;
+		line-height: 1.5;
+	}
+
+	@media (max-width: 768px) {
+		.page-title {
+			font-size: 2rem;
+			flex-direction: column;
+			gap: calc(var(--spacing-unit));
+		}
+
+		.title-icon {
+			font-size: 2rem;
+		}
+
+		.page-description {
+			font-size: 1.125rem;
+		}
+
+		.albums-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

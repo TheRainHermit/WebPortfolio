@@ -1,0 +1,566 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+---
+
+<Layout>
+	<Navigation currentPage="games" />
+	
+	<main class="games-page">
+		<div class="container">
+			<header class="page-header">
+				<h1 class="page-title">
+					<span class="title-icon">🎮</span>
+					Games
+				</h1>
+				<p class="page-description">
+					Interactive experiences born from stormy nights and digital lightning. 
+					From retro-inspired arcade games to modern narrative adventures, 
+					explore worlds crafted in the quiet hours of the rain.
+				</p>
+			</header>
+
+			<section class="featured-games">
+				<h2 class="section-title">Storm-Born Games</h2>
+				<div class="games-grid">
+					<div class="game-card featured">
+						<div class="game-image">
+							<div class="image-placeholder">🌩️</div>
+						</div>
+						<div class="game-content">
+							<div class="game-status">Released</div>
+							<h3 class="game-title">Storm Odyssey</h3>
+							<p class="game-description">
+								A retro-inspired space adventure combining classic arcade gameplay with modern storytelling. 
+								Navigate through procedurally generated storm systems while uncovering an ancient mystery.
+							</p>
+							<div class="game-details">
+								<div class="detail-item">
+									<span class="detail-label">Platform:</span>
+									<span class="detail-value">PC, Mac, Linux</span>
+								</div>
+								<div class="detail-item">
+									<span class="detail-label">Genre:</span>
+									<span class="detail-value">Action, Adventure</span>
+								</div>
+								<div class="detail-item">
+									<span class="detail-label">Release:</span>
+									<span class="detail-value">2024</span>
+								</div>
+							</div>
+							<div class="game-links">
+								<a href="#" class="link-btn">Play Now</a>
+								<a href="#" class="link-btn secondary">Trailer</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-image">
+							<div class="image-placeholder">🧩</div>
+						</div>
+						<div class="game-content">
+							<div class="game-status">Released</div>
+							<h3 class="game-title">Rainy Code Puzzles</h3>
+							<p class="game-description">
+								An educational puzzle game that teaches programming concepts through engaging challenges 
+								and interactive problem-solving, set in a rain-soaked digital world.
+							</p>
+							<div class="game-details">
+								<div class="detail-item">
+									<span class="detail-label">Platform:</span>
+									<span class="detail-value">Web, Mobile</span>
+								</div>
+								<div class="detail-item">
+									<span class="detail-label">Genre:</span>
+									<span class="detail-value">Puzzle, Educational</span>
+								</div>
+							</div>
+							<div class="game-links">
+								<a href="#" class="link-btn">Play Now</a>
+								<a href="#" class="link-btn secondary">GitHub</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-image">
+							<div class="image-placeholder">🌙</div>
+						</div>
+						<div class="game-content">
+							<div class="game-status in-development">In Development</div>
+							<h3 class="game-title">Midnight Realms</h3>
+							<p class="game-description">
+								An upcoming fantasy RPG featuring dynamic storytelling, character customization, 
+								and immersive world-building elements set in a perpetually rainy realm.
+							</p>
+							<div class="game-details">
+								<div class="detail-item">
+									<span class="detail-label">Platform:</span>
+									<span class="detail-value">PC, Console</span>
+								</div>
+								<div class="detail-item">
+									<span class="detail-label">Genre:</span>
+									<span class="detail-value">RPG, Adventure</span>
+								</div>
+							</div>
+							<div class="game-links">
+								<a href="#" class="link-btn">Wishlist</a>
+								<a href="#" class="link-btn secondary">Dev Blog</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="game-jam-section">
+				<h2 class="section-title">Storm Jam Projects</h2>
+				<div class="jam-games-grid">
+					<div class="jam-game-card">
+						<div class="jam-image">
+							<div class="image-placeholder">⚡</div>
+						</div>
+						<div class="jam-content">
+							<h4 class="jam-title">Lightning Runner</h4>
+							<p class="jam-event">Global Game Jam 2024</p>
+							<p class="jam-description">48-hour endless runner with dynamic storm mechanics and lightning effects.</p>
+							<div class="jam-tech">
+								<span class="tech-tag">Unity</span>
+								<span class="tech-tag">C#</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="jam-game-card">
+						<div class="jam-image">
+							<div class="image-placeholder">🎯</div>
+						</div>
+						<div class="jam-content">
+							<h4 class="jam-title">Precision Storm</h4>
+							<p class="jam-event">Ludum Dare 53</p>
+							<p class="jam-description">Physics-based puzzle game about precise movements in stormy weather.</p>
+							<div class="jam-tech">
+								<span class="tech-tag">Godot</span>
+								<span class="tech-tag">GDScript</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="jam-game-card">
+						<div class="jam-image">
+							<div class="image-placeholder">🏰</div>
+						</div>
+						<div class="jam-content">
+							<h4 class="jam-title">Storm Castle Defense</h4>
+							<p class="jam-event">Mini Jam 2023</p>
+							<p class="jam-description">Tower defense with weather mechanics and storm-powered defenses.</p>
+							<div class="jam-tech">
+								<span class="tech-tag">JavaScript</span>
+								<span class="tech-tag">HTML5</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="jam-game-card">
+						<div class="jam-image">
+							<div class="image-placeholder">🌧️</div>
+						</div>
+						<div class="jam-content">
+							<h4 class="jam-title">Rain Lander</h4>
+							<p class="jam-event">7DRL 2023</p>
+							<p class="jam-description">Atmospheric space exploration roguelike with rain-themed mechanics.</p>
+							<div class="jam-tech">
+								<span class="tech-tag">Python</span>
+								<span class="tech-tag">Pygame</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="development-section">
+				<h2 class="section-title">Storm Development Arsenal</h2>
+				<div class="tools-grid">
+					<div class="tool-category">
+						<h3>Game Engines</h3>
+						<ul>
+							<li>Unity 2022.3 LTS</li>
+							<li>Godot 4.0</li>
+							<li>Unreal Engine 5</li>
+							<li>Custom Storm Engine</li>
+						</ul>
+					</div>
+					<div class="tool-category">
+						<h3>Programming Languages</h3>
+						<ul>
+							<li>C# (Unity)</li>
+							<li>GDScript (Godot)</li>
+							<li>JavaScript/TypeScript</li>
+							<li>Python (Pygame)</li>
+						</ul>
+					</div>
+					<div class="tool-category">
+						<h3>Art & Design</h3>
+						<ul>
+							<li>Aseprite (Pixel Art)</li>
+							<li>Blender (3D Modeling)</li>
+							<li>Photoshop (Textures)</li>
+							<li>Figma (UI Design)</li>
+						</ul>
+					</div>
+					<div class="tool-category">
+						<h3>Audio</h3>
+						<ul>
+							<li>Audacity (Sound Effects)</li>
+							<li>FL Studio (Music)</li>
+							<li>Rain Recordings (Ambience)</li>
+							<li>FMOD (Audio Engine)</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.games-page {
+		padding-top: 64px;
+		min-height: 100vh;
+		background: 
+			radial-gradient(circle at 20% 80%, rgba(71, 85, 105, 0.3) 0%, transparent 50%),
+			radial-gradient(circle at 80% 20%, rgba(51, 65, 85, 0.3) 0%, transparent 50%),
+			linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+	}
+
+	.page-header {
+		text-align: center;
+		padding: calc(var(--spacing-unit) * 8) 0;
+	}
+
+	.page-title {
+		font-size: 3rem;
+		font-weight: 700;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: calc(var(--spacing-unit) * 2);
+		text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	}
+
+	.title-icon {
+		font-size: 3rem;
+		filter: drop-shadow(0 0 10px rgba(148, 163, 184, 0.3));
+	}
+
+	.page-description {
+		font-size: 1.25rem;
+		color: #cbd5e1;
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.section-title {
+		font-size: 2rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) * 4);
+		text-align: center;
+		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	}
+
+	.featured-games {
+		margin-bottom: calc(var(--spacing-unit) * 10);
+	}
+
+	.games-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: calc(var(--spacing-unit) * 3);
+	}
+
+	.game-card {
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-radius: 16px;
+		overflow: hidden;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		transition: all 0.3s ease;
+		border: 1px solid var(--glass-border);
+	}
+
+	.game-card.featured {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+		min-height: 400px;
+	}
+
+	.game-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+		border-color: rgba(148, 163, 184, 0.4);
+	}
+
+	.game-image {
+		height: 250px;
+		background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.game-card.featured .game-image {
+		height: 100%;
+	}
+
+	.image-placeholder {
+		font-size: 4rem;
+		color: white;
+		filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+	}
+
+	.game-content {
+		padding: calc(var(--spacing-unit) * 3);
+	}
+
+	.game-status {
+		display: inline-block;
+		padding: calc(var(--spacing-unit) / 2) calc(var(--spacing-unit));
+		background: var(--color-success);
+		color: white;
+		border-radius: 12px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+		box-shadow: 0 2px 10px rgba(34, 211, 238, 0.3);
+	}
+
+	.game-status.in-development {
+		background: var(--color-warning);
+		box-shadow: 0 2px 10px rgba(251, 191, 36, 0.3);
+	}
+
+	.game-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit));
+	}
+
+	.game-description {
+		color: #cbd5e1;
+		line-height: 1.6;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+	}
+
+	.game-details {
+		margin-bottom: calc(var(--spacing-unit) * 2);
+	}
+
+	.detail-item {
+		display: flex;
+		margin-bottom: calc(var(--spacing-unit) / 2);
+	}
+
+	.detail-label {
+		font-weight: 600;
+		color: #e2e8f0;
+		min-width: 80px;
+	}
+
+	.detail-value {
+		color: #cbd5e1;
+	}
+
+	.game-links {
+		display: flex;
+		gap: calc(var(--spacing-unit));
+	}
+
+	.link-btn {
+		padding: calc(var(--spacing-unit)) calc(var(--spacing-unit) * 2);
+		border-radius: 8px;
+		font-weight: 500;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+		color: white;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+	}
+
+	.link-btn.secondary {
+		background: transparent;
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		box-shadow: none;
+	}
+
+	.link-btn:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
+
+	.link-btn.secondary:hover {
+		background: var(--color-accent);
+		color: white;
+	}
+
+	.game-jam-section {
+		margin-bottom: calc(var(--spacing-unit) * 10);
+	}
+
+	.jam-games-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: calc(var(--spacing-unit) * 2);
+	}
+
+	.jam-game-card {
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s ease;
+		border: 1px solid var(--glass-border);
+	}
+
+	.jam-game-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+		border-color: rgba(148, 163, 184, 0.3);
+	}
+
+	.jam-image {
+		height: 150px;
+		background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.jam-image .image-placeholder {
+		font-size: 2.5rem;
+		color: white;
+		filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+	}
+
+	.jam-content {
+		padding: calc(var(--spacing-unit) * 2);
+	}
+
+	.jam-title {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) / 2);
+	}
+
+	.jam-event {
+		color: var(--color-accent);
+		font-size: 0.875rem;
+		font-weight: 500;
+		margin-bottom: calc(var(--spacing-unit));
+	}
+
+	.jam-description {
+		color: #cbd5e1;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+	}
+
+	.jam-tech {
+		display: flex;
+		gap: calc(var(--spacing-unit) / 2);
+	}
+
+	.tech-tag {
+		background: rgba(148, 163, 184, 0.2);
+		color: #e2e8f0;
+		padding: calc(var(--spacing-unit) / 4) calc(var(--spacing-unit) / 2);
+		border-radius: 8px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		border: 1px solid rgba(148, 163, 184, 0.3);
+	}
+
+	.development-section {
+		margin-bottom: calc(var(--spacing-unit) * 8);
+	}
+
+	.tools-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: calc(var(--spacing-unit) * 3);
+	}
+
+	.tool-category {
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-radius: 16px;
+		padding: calc(var(--spacing-unit) * 3);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		border: 1px solid var(--glass-border);
+		transition: all 0.3s ease;
+	}
+
+	.tool-category:hover {
+		transform: translateY(-2px);
+		border-color: rgba(148, 163, 184, 0.4);
+	}
+
+	.tool-category h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) * 2);
+	}
+
+	.tool-category ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.tool-category li {
+		padding: calc(var(--spacing-unit) / 2) 0;
+		color: #cbd5e1;
+		border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+	}
+
+	.tool-category li:last-child {
+		border-bottom: none;
+	}
+
+	@media (max-width: 768px) {
+		.page-title {
+			font-size: 2rem;
+			flex-direction: column;
+			gap: calc(var(--spacing-unit));
+		}
+
+		.title-icon {
+			font-size: 2rem;
+		}
+
+		.page-description {
+			font-size: 1.125rem;
+		}
+
+		.game-card.featured {
+			grid-template-columns: 1fr;
+		}
+
+		.games-grid,
+		.jam-games-grid,
+		.tools-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

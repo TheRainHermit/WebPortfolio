@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Artist from '../components/Artist.astro';
+import SectionPreview from '../components/SectionPreview.astro';
+---
+
+<Layout>
+	<Navigation currentPage="home" />
+	<Artist />
+	
+	<section class="sections-grid">
+		<div class="container">
+			<h2 class="sections-title">Explore My Creative Storm</h2>
+			<div class="grid">
+				<SectionPreview
+					title="Music"
+					description="Atmospheric compositions that capture the essence of rainy nights and digital dreams."
+					icon="🎵"
+					href="/music"
+					gradient="linear-gradient(135deg, #64748b, #94a3b8)"
+				/>
+				<SectionPreview
+					title="Programming"
+					description="Code crafted in the quiet hours, building digital experiences through the storm."
+					icon="💻"
+					href="/programming"
+					gradient="linear-gradient(135deg, #475569, #64748b)"
+				/>
+				<SectionPreview
+					title="Games"
+					description="Interactive worlds born from midnight inspiration and creative lightning strikes."
+					icon="🎮"
+					href="/games"
+					gradient="linear-gradient(135deg, #334155, #475569)"
+				/>
+				<SectionPreview
+					title="Writing"
+					description="Stories that flow like rain, exploring the depths of technology and human emotion."
+					icon="📝"
+					href="/writing"
+					gradient="linear-gradient(135deg, #1e293b, #334155)"
+				/>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.sections-grid {
+		padding: calc(var(--spacing-unit) * 10) 0;
+		background: 
+			radial-gradient(circle at 30% 70%, rgba(71, 85, 105, 0.2) 0%, transparent 50%),
+			radial-gradient(circle at 70% 30%, rgba(51, 65, 85, 0.2) 0%, transparent 50%);
+		position: relative;
+	}
+
+	.sections-grid::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="drops" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="0.8" fill="rgba(148,163,184,0.05)"/><circle cx="8" cy="22" r="0.5" fill="rgba(148,163,184,0.03)"/><circle cx="22" cy="8" r="0.6" fill="rgba(148,163,184,0.04)"/></pattern></defs><rect width="100" height="100" fill="url(%23drops)"/></svg>');
+		opacity: 0.5;
+	}
+
+	.sections-title {
+		text-align: center;
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: #f1f5f9;
+		margin-bottom: calc(var(--spacing-unit) * 6);
+		text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+		position: relative;
+		z-index: 1;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: calc(var(--spacing-unit) * 3);
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (max-width: 768px) {
+		.sections-title {
+			font-size: 2rem;
+		}
+
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

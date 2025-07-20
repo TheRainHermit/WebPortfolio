@@ -10,7 +10,7 @@ export default function Carrito() {
   const { refreshInsignias } = useInsignias();
   const { cart, removeFromCart, clearCart } = useCart();
   const { stock, updateStock, fetchStock } = useInventory();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [fecha, setFecha] = useState("");
   const [metodo, setMetodo] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -21,6 +21,12 @@ export default function Carrito() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Verificar que el usuario esté autenticado
+    if (!user || !user.id_usuario) {
+      setMensaje("Debes iniciar sesión para realizar una compra");
+      return;
+    }
 
     setMensaje("");
 
@@ -68,7 +74,7 @@ export default function Carrito() {
       });
 
       const compraData = await compraRes.json();
-      //console.log("Respuesta compra:", compraRes.status, compraData);
+      console.log("Respuesta compra:", compraRes.status, compraData);
 
       if (!compraRes.ok) {
         setMensaje(compraData.error || "Error al registrar la compra");
@@ -112,7 +118,7 @@ export default function Carrito() {
         //console.log("fetchStock llamado tras compra")
       }
 
-      refreshInsignias();
+      //refreshInsignias();
       setMensaje("¡Compra realizada con éxito!");
       // Al completar una compra:
       toast.success("¡Compra realizada! Revisa tu correo para el comprobante.");
@@ -120,6 +126,38 @@ export default function Carrito() {
       clearCart();
       setFecha("");
       setMetodo("");
+
+      try {
+        console.log("Verificando insignias para usuario:", user.id_usuario);
+        const insigniasResponse = await fetch('http://localhost:3000/api/insignias/verificar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ id_usuario: user.id_usuario })
+        });
+    
+        const insigniasData = await insigniasResponse.json();
+        console.log("Respuesta de verificación de insignias:", insigniasData);
+        
+        if (insigniasData.success && insigniasData.insignias && insigniasData.insignias.length > 0) {
+          console.log("Nuevas insignias desbloqueadas:", insigniasData.insignias);
+          toast.success(`¡Felicidades! Has desbloqueado ${insigniasData.insignias.length} nuevas insignias`);
+          
+          // Actualizar el contexto de insignias
+          if (refreshInsignias) {
+            await refreshInsignias();
+            console.log("Insignias actualizadas en el contexto");
+          }
+        } else {
+          console.log("No se otorgaron nuevas insignias");
+        }
+      } catch (error) {
+        console.error("Error al verificar insignias:", error);
+        // No mostramos error al usuario para no afectar la experiencia de compra
+      }
+
     } catch (error) {
       console.error("Error en compra:", error);
       setMensaje("Hubo un error al procesar la compra o actualizar el stock.");
@@ -196,27 +234,69 @@ export default function Carrito() {
             )}
           </>
         )}
-        <label htmlFor="fecha_compra">Fecha de compra:</label>
-        <input
-          type="date"
-          id="fecha_compra"
-          value={fecha}
-          onChange={e => setFecha(e.target.value)}
-          disabled={isLoading}
-        />
-        <label htmlFor="metodo_pago">Método de pago:</label>
-        <select
-          id="metodo_pago"
-          value={metodo}
-          onChange={e => setMetodo(e.target.value)}
-          disabled={isLoading}
-        >
-          <option value="">Selecciona un método</option>
-          <option value="credito">Tarjeta Crédito</option>
-          <option value="debito">Tarjeta Débito</option>
-          <option value="paypal">PayPal</option>
-          <option value="pse">PSE</option>
-        </select>
+        <div style={{
+          display: 'flex',
+          gap: '20px',
+          margin: '20px 0',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <div style={{
+              marginBottom: '8px',
+              fontWeight: 500,
+              color: '#2c3e50'
+            }}>
+              Fecha de compra
+            </div>
+            <input
+              type="date"
+              id="fecha_compra"
+              value={fecha}
+              onChange={e => setFecha(e.target.value)}
+              disabled={isLoading}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: '4px',
+                border: '1px solid #ced4da',
+                fontSize: '16px',
+                backgroundColor: isLoading ? '#f8f9fa' : 'white',
+                cursor: isLoading ? 'not-allowed' : 'pointer'
+              }}
+            />
+          </div>
+
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <div style={{
+              marginBottom: '8px',
+              fontWeight: 500,
+              color: '#2c3e50'
+            }}>
+              Método de pago
+            </div>
+            <select
+              id="metodo_pago"
+              value={metodo}
+              onChange={e => setMetodo(e.target.value)}
+              disabled={isLoading}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: '4px',
+                border: '1px solid #ced4da',
+                fontSize: '16px',
+                backgroundColor: isLoading ? '#f8f9fa' : 'white',
+                cursor: isLoading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <option value="">Selecciona un método</option>
+              <option value="credito">Tarjeta Crédito</option>
+              <option value="debito">Tarjeta Débito</option>
+              <option value="paypal">PayPal</option>
+              <option value="pse">PSE</option>
+            </select>
+          </div>
+        </div>
       </form>
       {/*showModal && (
         // Al completar una compra:

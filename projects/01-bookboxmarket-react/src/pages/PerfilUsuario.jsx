@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import CambiarContraseña from "./CambiarContraseña";
 import InsigniasUsuario from "./InsigniasUsuario";
+import { InsigniasProvider } from "../context/InsigniasContext";
 import RankingUsuarios from "./RankingUsuarios";
 
 export default function PerfilUsuario() {
@@ -21,6 +22,35 @@ export default function PerfilUsuario() {
   const passBtnRef = useRef(null);
   const indicatorRef = useRef(null);
 
+  //useEffect(() => {
+    const verificarInsignias = async () => {
+      if (user?.id_usuario) {
+        try {
+          const response = await fetch('http://localhost:3000/api/insignias/verificar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ id_usuario: user.id_usuario })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error en la petición');
+          }
+
+          const data = await response.json();
+          if (data.insignias && data.insignias.length > 0) {
+            console.log('Nuevas insignias otorgadas:', data.insignias);
+          }
+        } catch (error) {
+          console.error('Error verificando insignias:', error);
+          // No mostramos toast aquí para no molestar al usuario
+        }
+      }
+    };
+  //}, [user?.id_usuario]);
+
   useEffect(() => {
     setPerfil({
       nombre: user?.nombre || "",
@@ -28,6 +58,9 @@ export default function PerfilUsuario() {
       preferencias_literarias: user?.preferencias_literarias || "",
     });
   }, [user]);
+
+  console.log("Usuario actual:", user);
+  console.log("ID de usuario:", user?.id_usuario);
 
   // Mueve el indicador visual bajo la pestaña activa
   useEffect(() => {
@@ -163,14 +196,24 @@ export default function PerfilUsuario() {
             )}
           </section>
 
-          <section>
-            <div className="section-title">Insignias obtenidas</div>
-            <InsigniasUsuario />
+          {/* Sección de Insignias */}
+          <section className="mt-12">
+            {user?.id_usuario ? (
+              <InsigniasProvider idUsuario={user.id_usuario}>
+                <InsigniasUsuario />
+              </InsigniasProvider>
+            ) : (
+              <div className="text-center py-4 text-gray-600">
+                Inicia sesión para ver tus insignias
+              </div>
+            )}
           </section>
 
-          <section>
-            <div className="section-title">Ranking de usuarios más activos</div>
-            <RankingUsuarios />
+          {/* Sección de Ranking */}
+          <section className="mt-8">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <RankingUsuarios />
+            </div>
           </section>
         </>
       )}

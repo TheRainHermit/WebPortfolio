@@ -1,0 +1,120 @@
+---
+interface Props {
+	currentPage?: string;
+}
+
+const { currentPage = 'home' } = Astro.props;
+---
+
+<nav class="navigation">
+	<div class="container">
+		<div class="nav-content">
+			<a href="/" class="logo">
+				<span class="logo-icon">🌧️</span>
+				<span class="logo-text">Artist</span>
+			</a>
+			
+			<div class="nav-links">
+				<a href="/" class={currentPage === 'home' ? 'active' : ''}>Home</a>
+				<a href="/music" class={currentPage === 'music' ? 'active' : ''}>Music</a>
+				<a href="/programming" class={currentPage === 'programming' ? 'active' : ''}>Code</a>
+				<a href="/games" class={currentPage === 'games' ? 'active' : ''}>Games</a>
+				<a href="/writing" class={currentPage === 'writing' ? 'active' : ''}>Writing</a>
+			</div>
+			
+			<button class="mobile-menu-toggle" aria-label="Toggle menu">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+		</div>
+	</div>
+</nav>
+
+<style>
+	.navigation {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-bottom: 1px solid var(--glass-border);
+		z-index: 1000;
+		transition: all 0.3s ease;
+	}
+
+	.nav-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 64px;
+	}
+
+	.logo {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--spacing-unit) * 1.5);
+		font-weight: 600;
+		font-size: 1.25rem;
+		color: var(--color-accent);
+	}
+
+	.logo-icon {
+		font-size: 1.5rem;
+	}
+
+	.nav-links {
+		display: flex;
+		gap: calc(var(--spacing-unit) * 4);
+	}
+
+	.nav-links a {
+		font-weight: 500;
+		color: var(--color-neutral-300);
+		transition: all 0.3s ease;
+		position: relative;
+		padding: calc(var(--spacing-unit)) 0;
+	}
+
+	.nav-links a:hover,
+	.nav-links a.active {
+		color: var(--color-accent);
+		text-shadow: 0 0 10px rgba(148, 163, 184, 0.5);
+	}
+
+	.nav-links a.active::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+		border-radius: 1px;
+	}
+
+	.mobile-menu-toggle {
+		display: none;
+		flex-direction: column;
+		gap: 4px;
+		padding: calc(var(--spacing-unit) * 1.5);
+	}
+
+	.mobile-menu-toggle span {
+		width: 20px;
+		height: 2px;
+		background: var(--color-neutral-300);
+		transition: all 0.2s ease;
+	}
+
+	@media (max-width: 768px) {
+		.nav-links {
+			display: none;
+		}
+
+		.mobile-menu-toggle {
+			display: flex;
+		}
+	}
+</style>

@@ -1,0 +1,250 @@
+---
+---
+
+<section class="artist ">
+	<div class="container">
+		<div class="artist-content">
+			<div class="artist-text">
+				<h1 class="artist-title">
+					Creative <span class="gradient-text">Multi-Disciplinary</span> Artist
+				</h1>
+				<p class="artist-description">
+					Exploring the intersection of music, code, games, and storytelling through the lens of a rainy night. 
+					Crafting experiences that inspire, entertain, and push creative boundaries in the digital storm.
+				</p>
+				<div class="artist-actions">
+					<a href="/music" class="btn btn-primary">
+						🎵 Listen to Music
+					</a>
+					<a href="/programming" class="btn btn-secondary">
+						💻 View Code
+					</a>
+				</div>
+			</div>
+			<div class="artist-visual">
+				<div class="floating-cards">
+					<div class="card music-card">
+						<div class="card-icon">🎵</div>
+						<div class="card-title">Music</div>
+					</div>
+					<div class="card code-card">
+						<div class="card-icon">💻</div>
+						<div class="card-title">Code</div>
+					</div>
+					<div class="card games-card">
+						<div class="card-icon">🎮</div>
+						<div class="card-title">Games</div>
+					</div>
+					<div class="card writing-card">
+						<div class="card-icon">📝</div>
+						<div class="card-title">Writing</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.artist {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		padding-top: 64px;
+		background: 
+			radial-gradient(circle at 20% 80%, rgba(71, 85, 105, 0.3) 0%, transparent 50%),
+			radial-gradient(circle at 80% 20%, rgba(51, 65, 85, 0.3) 0%, transparent 50%),
+			linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+		color: #f1f5f9;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.artist::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="raindrops" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="rgba(148,163,184,0.1)"/><circle cx="5" cy="15" r="0.3" fill="rgba(148,163,184,0.08)"/><circle cx="15" cy="5" r="0.4" fill="rgba(148,163,184,0.06)"/></pattern></defs><rect width="100" height="100" fill="url(%23raindrops)"/></svg>');
+		opacity: 0.3;
+		animation: drift 20s linear infinite;
+	}
+
+	@keyframes drift {
+		0% { transform: translateX(0) translateY(0); }
+		100% { transform: translateX(-20px) translateY(-20px); }
+	}
+
+	.artist-content {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: calc(var(--spacing-unit) * 8);
+		align-items: center;
+		position: relative;
+		z-index: 1;
+	}
+
+	.artist-title {
+		font-size: 3.5rem;
+		font-weight: 700;
+		margin-bottom: calc(var(--spacing-unit) * 3);
+		line-height: 1.1;
+		text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	}
+
+	.gradient-text {
+		background: linear-gradient(45deg, #94a3b8, #cbd5e1, #e2e8f0);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		filter: drop-shadow(0 0 10px rgba(148, 163, 184, 0.3));
+	}
+
+	.artist-description {
+		font-size: 1.25rem;
+		margin-bottom: calc(var(--spacing-unit) * 4);
+		opacity: 0.9;
+		line-height: 1.6;
+		color: #cbd5e1;
+	}
+
+	.artist-actions {
+		display: flex;
+		gap: calc(var(--spacing-unit) * 2);
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+		border-radius: 12px;
+		font-weight: 600;
+		font-size: 1rem;
+		transition: all 0.3s ease;
+		display: inline-flex;
+		align-items: center;
+		gap: calc(var(--spacing-unit));
+		backdrop-filter: blur(10px);
+	}
+
+	.btn-primary {
+		background: rgba(148, 163, 184, 0.2);
+		color: #f1f5f9;
+		border: 1px solid rgba(148, 163, 184, 0.3);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
+
+	.btn-primary:hover {
+		background: rgba(148, 163, 184, 0.3);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+	}
+
+	.btn-secondary {
+		background: transparent;
+		color: #cbd5e1;
+		border: 1px solid rgba(148, 163, 184, 0.3);
+	}
+
+	.btn-secondary:hover {
+		background: rgba(148, 163, 184, 0.1);
+		transform: translateY(-2px);
+		border-color: rgba(148, 163, 184, 0.5);
+	}
+
+	.floating-cards {
+		position: relative;
+		height: 400px;
+	}
+
+	.card {
+		position: absolute;
+		width: 120px;
+		height: 120px;
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		border-radius: 16px;
+		border: 1px solid var(--glass-border);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: calc(var(--spacing-unit));
+		animation: float 6s ease-in-out infinite;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	}
+
+	.card-icon {
+		font-size: 2rem;
+		filter: drop-shadow(0 0 10px rgba(148, 163, 184, 0.3));
+	}
+
+	.card-title {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #e2e8f0;
+	}
+
+	.music-card {
+		top: 0;
+		left: 0;
+		animation-delay: 0s;
+	}
+
+	.code-card {
+		top: 0;
+		right: 0;
+		animation-delay: 1.5s;
+	}
+
+	.games-card {
+		bottom: 0;
+		left: 0;
+		animation-delay: 3s;
+	}
+
+	.writing-card {
+		bottom: 0;
+		right: 0;
+		animation-delay: 4.5s;
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0px) rotate(0deg); }
+		50% { transform: translateY(-20px) rotate(2deg); }
+	}
+
+	@media (max-width: 768px) {
+		.artist-content {
+			grid-template-columns: 1fr;
+			gap: calc(var(--spacing-unit) * 4);
+			text-align: center;
+		}
+
+		.artist-title {
+			font-size: 2.5rem;
+		}
+
+		.artist-description {
+			font-size: 1.125rem;
+		}
+
+		.floating-cards {
+			height: 200px;
+		}
+
+		.card {
+			width: 80px;
+			height: 80px;
+		}
+
+		.card-icon {
+			font-size: 1.5rem;
+		}
+
+		.card-title {
+			font-size: 0.75rem;
+		}
+	}
+</style>

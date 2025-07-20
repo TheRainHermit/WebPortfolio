@@ -1,23 +1,42 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    line-height: 1.0;
-    background-color: rgb(204, 204, 204);
-  }
-  
-  h1 {
-    font-size: 36px;
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  color: #333;
+  line-height: 1.6; /* Ajusté el line-height para mejor legibilidad */
+  background-color: rgb(204, 204, 204);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  h2 {
-    font-size: 18px;
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+h1 {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: 36px;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600; /* Para que los títulos se vean mejor en Segoe UI */
+}
+
+h2 {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: 18px;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 500; /* Peso medio para subtítulos */
+}
+
+/* Asegurar que los textos en Material-UI también usen Segoe UI */
+.MuiTypography-root {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif !important;
+}
 
   h3 {
     font-size: 12px;
@@ -1157,4 +1176,28 @@ Catálogo
   height: 2px;
   background: #2ecc40;
   transition: left 0.2s, width 0.2s;
+}
+
+/* Transiciones suaves */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Efecto hover para las tarjetas */
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+/* Gradiente sutil para las insignias desbloqueadas */
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+/* Animación de carga */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }

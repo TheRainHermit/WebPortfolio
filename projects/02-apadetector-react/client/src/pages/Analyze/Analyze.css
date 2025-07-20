@@ -1,0 +1,144 @@
+.analyze-container {
+  padding: 2rem;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Estilos para el área de arrastrar y soltar */
+.dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: var(--background);
+}
+
+.dropzone:hover,
+.dropzone-active {
+  border-color: var(--primary-color);
+  background-color: var(--hover-bg);
+}
+
+.dropzone-icon {
+  font-size: 3rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* Estilos para los resultados de análisis */
+.results-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.results-header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.results-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+}
+
+/* Estilos para los tabs de filtrado */
+.results-tabs {
+  min-height: auto;
+}
+
+.results-tabs .MuiTab-root {
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  text-transform: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Estilos para la vista de carga */
+.loading-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: var(--text-secondary);
+}
+
+/* Estilos para la vista vacía */
+.empty-state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: var(--border-color);
+  margin-bottom: 1rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 960px) {
+  .analyze-container {
+    padding: 1rem;
+  }
+  
+  .upload-section,
+  .results-section {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Personalización de la barra de desplazamiento */
+.results-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.results-list::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.analysis-result {
+  animation: fadeIn 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+.analysis-result:nth-child(1) { animation-delay: 0.1s; }
+.analysis-result:nth-child(2) { animation-delay: 0.2s; }
+.analysis-result:nth-child(3) { animation-delay: 0.3s; }
+.analysis-result:nth-child(4) { animation-delay: 0.4s; }
+.analysis-result:nth-child(5) { animation-delay: 0.5s; }

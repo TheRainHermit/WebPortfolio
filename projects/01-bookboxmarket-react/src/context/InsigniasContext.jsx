@@ -2,48 +2,114 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 
 const InsigniasContext = createContext();
 
-export function useInsignias() {
-  return useContext(InsigniasContext);
-}
-
 export function InsigniasProvider({ idUsuario, children }) {
   const [todas, setTodas] = useState([]);
   const [obtenidas, setObtenidas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const fetchInsignias = useCallback(async () => {
-    if (!idUsuario) return;
-    setLoading(true);
+  // Obtener todas las insignias disponibles
+  const fetchTodasInsignias = useCallback(async () => {
     try {
-      const [allRes, userRes] = await Promise.all([
-        fetch("http://localhost:3000/api/insignias"),
-        fetch(`http://localhost:3000/api/insignias/${idUsuario}`)
-      ]);
-      const allData = await allRes.json();
-      const userData = await userRes.json();
-      setTodas(allData.insignias || []);
-      setObtenidas(userData.insignias || []);
+      const response = await fetch('http://localhost:3000/api/insignias');
+      if (!response.ok) throw new Error('Error al cargar las insignias');
+      const data = await response.json();
+      setTodas(data);
+      return data;
     } catch (err) {
-      setTodas([]);
+      console.error("Error al cargar insignias:", err);
+      setError(err);
+      throw err;
+    }
+  }, []);
+
+  // Obtener insignias del usuario
+  const fetchInsigniasUsuario = useCallback(async () => {
+    if (!idUsuario) {
       setObtenidas([]);
-    } finally {
-      setLoading(false);
+      return [];
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:3000/api/insignias/usuario/${idUsuario}`);
+      if (!response.ok) throw new Error('Error al cargar insignias del usuario');
+      const data = await response.json();
+      setObtenidas(data);
+      return data;
+    } catch (err) {
+      console.error("Error al cargar insignias del usuario:", err);
+      setError(err);
+      throw err;
     }
   }, [idUsuario]);
 
-  // Refrescar insignias al montar o cuando cambia el usuario
+  // Cargar todos los datos necesarios
+  const cargarDatos = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await Promise.all([fetchTodasInsignias(), fetchInsigniasUsuario()]);
+    } catch (err) {
+      console.error("Error al cargar datos de insignias:", err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchTodasInsignias, fetchInsigniasUsuario]);
+
+  // Refrescar datos
+  const refreshInsignias = useCallback(async () => {
+    await cargarDatos();
+  }, [cargarDatos]);
+
+  // Cargar datos al montar y cuando cambie el idUsuario
   useEffect(() => {
-    fetchInsignias();
-  }, [fetchInsignias]);
+    cargarDatos();
+  }, [cargarDatos]);
+
+  // Verificar si hay nuevas insignias
+  useEffect(() => {
+    if (obtenidas.length > 0) {
+      const nuevasInsignias = localStorage.getItem('nuevasInsignias');
+      if (nuevasInsignias) {
+        const idsNuevasInsignias = JSON.parse(nuevasInsignias);
+        const insigniasDesbloqueadas = todas
+          .filter(insignia => 
+            idsNuevasInsignias.includes(insignia.id_insignia) && 
+            !obtenidas.some(o => o.id_insignia === insignia.id_insignia)
+          );
+          
+        if (insigniasDesbloqueadas.length > 0) {
+          insigniasDesbloqueadas.forEach(insignia => {
+            toast.success(`¡Nueva insignia desbloqueada: ${insignia.nombre}!`);
+          });
+          // Actualizar insignias obtenidas
+          setObtenidas(prev => [...prev, ...insigniasDesbloqueadas]);
+        }
+        localStorage.removeItem('nuevasInsignias');
+      }
+    }
+  }, [todas, obtenidas]);
 
   return (
-    <InsigniasContext.Provider value={{
-      todas,
-      obtenidas,
-      loading,
-      refreshInsignias: fetchInsignias
-    }}>
+    <InsigniasContext.Provider 
+      value={{ 
+        todas, 
+        obtenidas, 
+        loading, 
+        error, 
+        refreshInsignias 
+      }}
+    >
       {children}
     </InsigniasContext.Provider>
   );
 }
+
+export const useInsignias = () => {
+  const context = useContext(InsigniasContext);
+  if (!context) {
+    throw new Error('useInsignias debe ser usado dentro de un InsigniasProvider');
+  }
+  return context;
+};

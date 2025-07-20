@@ -1,12 +1,62 @@
-# React + Vite
+# APADetector
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Herramienta para verificar el cumplimiento de las normas APA en documentos académicos.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Análisis de formato según normas APA 7ma edición
+- Detección de citas y referencias
+- Sugerencias de corrección
+- Interfaz intuitiva y fácil de usar
 
-## Expanding the ESLint configuration
+## Requisitos
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js 16+ y npm 8+
+- Navegador web moderno
+
+## Instalación
+
+1. Clonar el repositorio
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+3. Iniciar el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+
+## Estructura del Proyecto
+
+02-apadetector-react/
+├── client/                  # Frontend React
+│   ├── public/
+│   └── src/
+│       ├── components/      # Componentes reutilizables
+│       ├── pages/           # Páginas principales
+│       ├── services/        # Llamadas a la API
+│       ├── utils/           # Utilidades y validaciones
+│       ├── App.jsx
+│       └── index.js
+├── server/                  # Backend Node.js
+│   ├── controllers/         # Lógica de negocio
+│   ├── middlewares/         # Middlewares
+│   ├── models/              # Modelos de datos
+│   ├── routes/              # Rutas de la API
+│   ├── services/            # Servicios (lógica de APA)
+│   ├── utils/               # Utilidades
+│   └── server.js
+├── .gitignore
+└── README.md
+
+## Tecnologías Utilizadas
+
+- React 18
+- Vite
+- Material-UI
+- React Router
+- Axios
+
+## Licencia
+
+MIT

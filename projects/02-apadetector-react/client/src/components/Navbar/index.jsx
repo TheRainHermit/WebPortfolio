@@ -17,23 +17,25 @@ import MenuIcon from '@mui/icons-material/Menu';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
-
 import './Navbar.css';
+import useT from '../../i18n/useT';
 
 const Navbar = () => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const t = useT();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
     const menuItems = [
-        { text: 'Inicio', path: '/' },
-        { text: 'Analizar', path: '/analyze' },
-        { text: 'Acerca de', path: '/about' },
-        { text: 'Contacto', path: '/contact' },
+        { text: t('home'), path: '/' },
+        { text: t('analyze'), path: '/analyze' },
+        { text: t('documents'), path: '/documents' },
+        { text: t('about'), path: '/about' },
+        { text: t('contact'), path: '/contact' },
     ];
 
     const drawer = (
@@ -72,7 +74,7 @@ const Navbar = () => {
                         }
                     }}
                 >
-                    APADetector
+                    {t('appTitle')}
                 </Typography>
 
                 {isMobile ? (
@@ -100,7 +102,7 @@ const Navbar = () => {
                                     }
                                 }}
                             >
-                                {item.text}
+                                {t(item.text)}
                             </Button>
                         ))}
                     </Box>

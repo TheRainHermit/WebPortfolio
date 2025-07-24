@@ -1,30 +1,24 @@
-import express from 'express';
+import express, { json } from 'express';
 import cors from 'cors';
-import { config } from 'dotenv';
-import { errorHandler, notFound } from './src/middlewares/errorHandler.js';
-import routes from './src/routes/index.js';
-
-// Configuración de variables de entorno
-config();
+import analysisRoutes from './routes/analysisRoutes';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
-// Middlewares
+// Middlewares globales
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(json());
 
 // Rutas
-app.use('/', routes);
+app.use('/api/analyze', analysisRoutes);
 
-// Manejo de errores
-app.use(notFound);
-app.use(errorHandler);
-
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// Manejo de errores básicos
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-export default app;
+// Inicio del servidor
+app.listen(PORT, () => {
+  console.log(`Servidor APA Detector backend corriendo en puerto ${PORT}`);
+});

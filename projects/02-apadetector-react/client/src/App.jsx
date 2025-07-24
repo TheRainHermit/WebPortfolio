@@ -5,9 +5,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Navbar, Footer } from './components';
 import Home from './pages/Home';
 import Analyze from './pages/Analyze';
+import Results from './pages/Results';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import NotFound from './pages/NotFound/NotFound';
+import DocumentsList from './pages/Documents/DocumentsList';
 import './App.css';
 
 // Personalización del tema
@@ -259,6 +261,8 @@ function App() {
             <Routes>
             <Route path="/" element={<Home />} />
               <Route path="/analyze" element={<Analyze />} />
+              <Route path="/results/:id" element={<Results />} />
+              <Route path="/documents" element={<DocumentsList />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/404" element={<NotFound />} />

@@ -110,6 +110,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   } catch (err) {
     results.push({
       type: 'error',
+      title: 'Error al leer el archivo',
       message: 'No se pudo leer el archivo o el formato es inválido/corrupto.',
       suggestion: 'Verifica que el archivo esté bien formado y no esté dañado. Solo se aceptan archivos PDF, DOCX, ODT o TXT legibles.'
     });
@@ -123,6 +124,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (linesArray.length > MAX_LINES) {
     results.push({
       type: 'error',
+      title: 'Error al leer el archivo',
       message: `El documento es demasiado grande (${linesArray.length} líneas).`,
       suggestion: `Reduce el documento a menos de ${MAX_LINES} líneas antes de analizarlo.`
     });
@@ -132,6 +134,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (totalWords > MAX_WORDS) {
     results.push({
       type: 'error',
+      title: 'Error al leer el archivo',
       message: `El documento es demasiado grande (${totalWords} palabras).`,
       suggestion: `Reduce el documento a menos de ${MAX_WORDS} palabras antes de analizarlo.`
     });
@@ -142,6 +145,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (numPages !== null && numPages < 2) {
     results.push({
       type: 'warning',
+      title: 'Advertencia',
       message: `El documento PDF tiene solo ${numPages} página(s).`,
       suggestion: 'Se recomienda que el documento tenga al menos 2 páginas.'
     });
@@ -153,6 +157,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (wordCount < minWords) {
     results.push({
       type: 'warning',
+      title: 'Advertencia',
       message: `El documento es muy corto (${wordCount} palabras).`,
       suggestion: `Asegúrate de que el documento tenga al menos ${minWords} palabras para cumplir con los estándares académicos.`
     });
@@ -163,6 +168,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (!portadaRegex.test(text)) {
     results.push({
       type: 'warning',
+      title: 'Advertencia',
       message: config.messages.portada,
       suggestion: config.messages.sugerenciaPortada
     });
@@ -173,6 +179,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (!resumenRegex.test(text)) {
     results.push({
       type: 'warning',
+      title: 'Advertencia',
       message: config.messages.resumen,
       suggestion: config.messages.sugerenciaResumen
     });
@@ -184,6 +191,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (!referenciasRegex.test(text)) {
     results.push({
       type: 'error',
+      title: 'Error',
       message: config.messages.referencias,
       suggestion: config.messages.sugerenciaReferencias
     });
@@ -212,6 +220,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
     if (filteredRefLines.length > 0 && badRefs > 0) {
       results.push({
         type: 'suggestion',
+        title: 'Sugerencia',
         message: `Se detectaron ${badRefs} referencia(s) que no parecen estar en formato APA.`,
         suggestion: 'Asegúrate de que cada referencia siga el formato: Apellido, Inicial. (Año). Título. Editorial.'
       });
@@ -221,6 +230,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
     if (numReferencias > 0) {
       results.push({
         type: 'info',
+        title: 'Información',
         message: `Se detectaron ${numReferencias} referencia(s) en la sección de referencias.`,
         suggestion: ''
       });
@@ -230,6 +240,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
     if (referenciasRegex.test(text) && numReferencias === 0) {
       results.push({
         type: 'warning',
+        title: 'Advertencia',
         message: 'No se detectaron referencias válidas en la sección de referencias.',
         suggestion: 'Asegúrate de incluir referencias en formato APA en la sección correspondiente.'
       });
@@ -250,6 +261,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
       const headerName = headerVariants[0].charAt(0).toUpperCase() + headerVariants[0].slice(1);
       results.push({
         type: 'suggestion',
+        title: 'Sugerencia',
         message: config.messages.headerMissing(headerName),
         suggestion: config.messages.headerSuggestion(headerName)
       });
@@ -263,18 +275,21 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (missingHeaders.length > 0) {
     results.push({
       type: 'info',
+      title: 'Información',
       message: config.messages.headerOrderMissing,
       suggestion: config.messages.headerOrderSuggestion
     });
   } else if (!isOrderCorrect) {
     results.push({
       type: 'suggestion',
+      title: 'Sugerencia',
       message: config.messages.headerOrderWrong,
       suggestion: config.messages.headerOrderWrongSuggestion
     });
   } else {
     results.push({
       type: 'info',
+      title: 'Información',
       message: config.messages.headerOrderCorrect,
       suggestion: ''
     });
@@ -287,6 +302,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (!citationMatches || numCitas < 2) {
     results.push({
       type: 'suggestion',
+      title: 'Sugerencia',
       message: config.messages.citationsFew,
       suggestion: config.messages.citationsFewSuggestion
     });
@@ -294,6 +310,7 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   // Resultado enriquecido: número de citas encontradas
   results.push({
     type: 'info',
+    title: 'Información',
     message: config.messages.citationsCount(numCitas),
     suggestion: ''
   });
@@ -303,12 +320,14 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
   if (onlyInfo) {
     results.push({
       type: 'minor',
+      title: 'Información',
       message: config.messages.minor,
       suggestion: config.messages.minorSuggestion
     });
   } else if (results.length === 0) {
     results.push({
       type: 'success',
+      title: 'Éxito',
       message: config.messages.success,
       suggestion: ''
     });

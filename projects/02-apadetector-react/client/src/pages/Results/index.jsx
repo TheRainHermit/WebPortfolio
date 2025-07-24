@@ -1,73 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { fetchAnalysisResults } from '../../services/api';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DownloadIcon from '@mui/icons-material/Download';
-import { Button, Typography, CircularProgress, Alert, Box, Paper, Stack, Divider, List, ListItem, ListItemText } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  Button, Typography, CircularProgress, Alert, Box, Paper, Stack, Divider, List, ListItem, ListItemText, Select, MenuItem
+} from '@mui/material';
 import { useLanguage, LANG_OPTIONS } from '../../context/LanguageContext';
 import useT from '../../i18n/useT';
+import useApiError from '../../hooks/useApiError';
+import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { fetchAnalysisResults } from '../../services/api';
 
-const I18N = {
-  es: {
-    back: 'Volver a analizar otro documento',
-    resultsTitle: 'Resultados del Análisis',
-    resultsFor: 'Resultados para',
-    reportLang: 'Idioma del reporte',
-    file: 'Archivo',
-    type: 'Tipo',
-    size: 'Tamaño',
-    noResults: 'No se encontraron resultados para este documento.',
-    suggestion: 'Sugerencia',
-    downloadPdf: 'Descargar PDF',
-    downloadExcel: 'Descargar Excel',
-    loading: 'Cargando...',
-    errorLoading: 'No se pudieron cargar los resultados.',
-    uploadedAt: 'Subido el',
-    message: 'Mensaje',
-    position: 'Posición',
-    context: 'Contexto'
-  },
-  en: {
-    back: 'Back to analyze another document',
-    resultsTitle: 'Analysis Results',
-    resultsFor: 'Results for',
-    reportLang: 'Report language',
-    file: 'File',
-    type: 'Type',
-    size: 'Size',
-    noResults: 'No results found for this document.',
-    suggestion: 'Suggestion',
-    downloadPdf: 'Download PDF',
-    downloadExcel: 'Download Excel',
-    loading: 'Loading...',
-    errorLoading: 'Failed to load results.',
-    uploadedAt: 'Uploaded at',
-    message: 'Message',
-    position: 'Position',
-    context: 'Context'
-  }
-};
+const COLORS = ['#ff7979', '#f6e58d', '#6ab04c', '#686de0', '#30336b'];
 
 export default function Results() {
+  const { id } = useParams();
   const { lang, changeLang } = useLanguage();
   const t = useT();
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [document, setDocument] = useState(null);
+  const getApiErrorMessage = useApiError();
+
+  //const [document, setDocument] = useState(null);
+  const [docInfo, setDocInfo] = useState(null);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    setError('');
     async function fetchResults() {
       setLoading(true);
-      setError('');
       try {
         const data = await fetchAnalysisResults(id, lang);
-        setDocument(data.document);
+        setDocInfo(data.docInfo);
         setResults(data.results);
       } catch (err) {
-        setError('No se pudieron cargar los resultados.');
+        setError(getApiErrorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -79,11 +47,55 @@ export default function Results() {
     changeLang(e.target.value);
   };
 
+  // --- Gráficas ---
+  const summary = results.reduce((acc, r) => {
+    acc[r.type] = (acc[r.type] || 0) + 1;
+    return acc;
+  }, {});
+  const chartData = Object.entries(summary).map(([type, count]) => ({
+    name: t(type),
+    value: count
+  }));
+
+  const sectionData = results.reduce((acc, r) => {
+    if (r.section) acc[r.section] = (acc[r.section] || 0) + 1;
+    return acc;
+  }, {});
+  const sectionChartData = Object.entries(sectionData).map(([section, count]) => ({
+    section,
+    count
+  }));
+
+  // --- Exportación ---
+  const handleExportExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(results);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Resultados');
+    XLSX.writeFile(wb, 'resultados-apa.xlsx');
+  };
+
+  const handleExportPDF = async () => {
+    const input = document.getElementById('results-summary');
+    if (!input) return;
+    const canvas = await html2canvas(input);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const imgWidth = Math.min(pageWidth - 40, canvas.width);
+    const imgHeight = (imgWidth / canvas.width) * canvas.height;
+    pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+    pdf.save('resultados-apa.pdf');
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
         <CircularProgress />
-        <Typography variant="body1" sx={{ ml: 2 }}>{t.loading}</Typography>
+        <Typography variant="body1" sx={{ ml: 2 }}>{t('loading')}</Typography>
       </Box>
     );
   }
@@ -91,80 +103,114 @@ export default function Results() {
   if (error) {
     return (
       <Alert severity="error" sx={{ mt: 4 }}>
-        {t.errorLoading}
+        {getApiErrorMessage(error)}
       </Alert>
     );
   }
 
   return (
-    <Box maxWidth={700} mx="auto" mt={4}>
-      <Button
-        variant="outlined"
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate('/analyze')}
-        sx={{ mb: 3 }}
-      >
-        {t('back')}
-      </Button>
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          {t('resultsTitle')}
-        </Typography>
-        <Typography variant="h5" gutterBottom>
-          {t('resultsFor')}: <strong>{document?.originalname}</strong>
-        </Typography>
-        {/* Selector de idioma global */}
-        <div style={{ margin: '16px 0' }}>
-          <label>
-            {t('reportLang')}:&nbsp;
-            <select value={lang} onChange={handleLangChange}>
-              {LANG_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-          <Button
-            startIcon={<DownloadIcon />}
-            onClick={handleDownloadPDF}
-            disabled={!results || results.length === 0}
-          >
-            {t('downloadPdf')}
-          </Button>
-          <Button
-            startIcon={<DownloadIcon />}
-            onClick={handleDownloadExcel}
-            disabled={!results || results.length === 0}
-          >
-            {t('downloadExcel')}
-          </Button>
-        </Stack>
-        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-          {t('uploadedAt')}: {new Date(document?.uploaded_at).toLocaleString()}
-        </Typography>
-        <Divider sx={{ my: 2 }} />
-        {(!results || results.length === 0) ? (
-          <Alert severity="info">{t('noResults')}</Alert>
-        ) : (
+    <Box maxWidth="900px" mx="auto" my={4}>
+      {/* Selector de idioma */}
+      <Box mb={2}>
+        <label>
+          {t('reportLang')}:&nbsp;
+          <Select value={lang} onChange={handleLangChange} size="small">
+            {LANG_OPTIONS.map(opt => (
+              <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+            ))}
+          </Select>
+        </label>
+      </Box>
+
+      {/* Botones de exportación */}
+      <Box display="flex" gap={2} mb={2}>
+        <Button variant="outlined" onClick={handleExportExcel}>{t('downloadExcel') || 'Descargar Excel'}</Button>
+        <Button variant="outlined" onClick={handleExportPDF}>{t('downloadPdf') || 'Descargar PDF'}</Button>
+      </Box>
+
+      {/* Bloque de resultados y gráficas para exportar */}
+      <div id="results-summary">
+        <Typography variant="h5" mb={2}>{t('resultsTitle')}</Typography>
+        {docInfo && (
+          <Typography variant="subtitle1" mb={2}>
+            {t('resultsFor')}: <b>{docInfo.originalname}</b> ({docInfo.mimetype}, {Math.round(docInfo.size / 1024)} KB)
+          </Typography>
+        )}
+
+        {/* Gráficas */}
+        <Box display="flex" flexWrap="wrap" gap={4} my={4} justifyContent="center">
+          {/* Pie Chart */}
+          <Box>
+            <Typography variant="subtitle1" align="center">{t('resultsTypeDistribution') || 'Distribución de tipos'}</Typography>
+            <PieChart width={300} height={220}>
+              <Pie data={chartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
+                {chartData.map((entry, idx) => (
+                  <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </Box>
+
+          {/* Bar Chart por sección */}
+          {sectionChartData.length > 0 && (
+            <Box>
+              <Typography variant="subtitle1" align="center">{t('resultsBySection') || 'Resultados por sección'}</Typography>
+              <BarChart width={340} height={220} data={sectionChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="section" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="count" fill="#686de0" />
+              </BarChart>
+            </Box>
+          )}
+        </Box>
+
+        {/* Lista de resultados */}
+        <Paper elevation={2} sx={{ p: 2, mt: 2 }}>
+          <Typography variant="h6" mb={1}>{t('resultsTitle')}</Typography>
+          <Divider sx={{ mb: 2 }} />
           <List>
-            {results.map((res, idx) => (
-              <ListItem key={idx}>
+            {results.map((r, idx) => (
+              <ListItem key={idx} alignItems="flex-start">
                 <ListItemText
-                  primary={res.message}
-                  secondary={res.suggestion && (
-                    <span>
-                      <strong>{t('suggestion')}: </strong> {res.suggestion}
-                    </span>
-                  )}
-                  primaryTypographyProps={{ variant: 'body1' }}
-                  secondaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                  primary={
+                    <strong>
+                      {t(r.type)}
+                      {r.title && typeof r.title === 'string' ? `: ${r.title}` : ''}
+                    </strong>
+                  }
+                  secondary={
+                    <>
+                      <Typography component="span" variant="body2" color="text.primary">
+                        {r.message}
+                      </Typography>
+                      {r.suggestion && (
+                        <>
+                          <br />
+                          <Typography component="span" variant="body2" color="success.main">
+                            {t('suggestion')}: {r.suggestion}
+                          </Typography>
+                        </>
+                      )}
+                      {r.section && (
+                        <>
+                          <br />
+                          <Typography component="span" variant="caption" color="text.secondary">
+                            {t('section')}: {r.section}
+                          </Typography>
+                        </>
+                      )}
+                    </>
+                  }
                 />
               </ListItem>
             ))}
           </List>
-        )}
-      </Paper>
+        </Paper>
+      </div>
     </Box>
   );
 }

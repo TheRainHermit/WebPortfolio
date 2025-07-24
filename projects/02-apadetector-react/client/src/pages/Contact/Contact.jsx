@@ -18,7 +18,7 @@ const Contact = () => {
             <Box sx={{ mt: 4, '& > div': { mb: 2 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <LocationIcon color="primary" sx={{ mr: 2 }} />
-                <Typography>Ciudad, País</Typography>
+                <Typography>Cali, Colombia</Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <EmailIcon color="primary" sx={{ mr: 2 }} />
@@ -26,7 +26,7 @@ const Contact = () => {
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <PhoneIcon color="primary" sx={{ mr: 2 }} />
-                <Typography>+1 234 567 890</Typography>
+                <Typography>+57 3194247585</Typography>
               </Box>
             </Box>
           </Paper>

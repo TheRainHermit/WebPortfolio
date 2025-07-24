@@ -2,11 +2,15 @@ import { analyzeFile } from '../services/apaService.js';
 import pool from '../models/db.js';
 import { unlinkSync } from 'fs';
 import multer from 'multer';
+import { errorResponse } from '../utils/errors.js';
+
+// Analizar documento
 
 export async function analyzeDocument(req, res) {
   try {
+    // Verificar que se haya enviado un archivo
     if (!req.file) {
-      return res.status(400).json({ error: 'No se envió ningún archivo o el archivo no es válido.' });
+      return errorResponse(res, 400, 'No se envió ningún archivo o el archivo no es válido.');
     }
 
     // 1. Guardar documento
@@ -19,6 +23,8 @@ export async function analyzeDocument(req, res) {
 
     // 2. Analizar archivo
     const analysisResults = await analyzeFile(req.file.path);
+
+    console.log('analysisResults:', analysisResults);
 
     // 3. Guardar resultados
     const insertPromises = analysisResults.map(result =>
@@ -44,14 +50,16 @@ export async function analyzeDocument(req, res) {
 
   } catch (error) {
     if (error instanceof multer.MulterError) {
-      // Error de Multer (tamaño, tipo, etc)
-      return res.status(400).json({ error: error.message });
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        return errorResponse(res, 'FILE_TOO_LARGE', 'El archivo es demasiado grande. Máximo permitido: 5 MB.', {}, 413);
+      }
+      return errorResponse(res, 'UPLOAD_ERROR', error.message, {}, 400);
     }
-    if (error.message === 'Tipo de archivo no permitido.') {
-      return res.status(400).json({ error: error.message });
+    if (error.code === 'FILE_TYPE_NOT_ALLOWED') {
+      return errorResponse(res, 'FILE_TYPE_NOT_ALLOWED', error.message, error.details, 415);
     }
     console.error(error);
-    res.status(500).json({ error: 'Error al analizar el documento.' });
+    return errorResponse(res, 500, 'Error al analizar el documento.');
   }
 }
 
@@ -61,14 +69,31 @@ export async function getAllDocuments(req, res) {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search || '';
+    const mimetype = req.query.mimetype || '';
+    const dateFrom = req.query.dateFrom || '';
+    const dateTo = req.query.dateTo || '';
+    const orderBy = req.query.orderBy || 'uploaded_at';
+    const orderDir = (req.query.orderDir || 'DESC').toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
     const offset = (page - 1) * limit;
 
-    let whereClause = '';
+    let whereClause = 'WHERE 1=1';
     let params = [];
 
     if (search) {
-      whereClause = 'WHERE originalname LIKE ?';
+      whereClause += ' AND originalname LIKE ?';
       params.push(`%${search}%`);
+    }
+    if (mimetype) {
+      whereClause += ' AND mimetype = ?';
+      params.push(mimetype);
+    }
+    if (dateFrom) {
+      whereClause += ' AND uploaded_at >= ?';
+      params.push(dateFrom);
+    }
+    if (dateTo) {
+      whereClause += ' AND uploaded_at <= ?';
+      params.push(dateTo);
     }
 
     // Total count for pagination
@@ -78,9 +103,9 @@ export async function getAllDocuments(req, res) {
     );
     const total = countRows[0].total;
 
-    // Fetch paginated documents
+    // Fetch paginated documents with ordering
     const [rows] = await pool.query(
-      `SELECT * FROM documents ${whereClause} ORDER BY uploaded_at DESC LIMIT ? OFFSET ?`,
+      `SELECT * FROM documents ${whereClause} ORDER BY ${orderBy} ${orderDir} LIMIT ? OFFSET ?`,
       [...params, limit, offset]
     );
 
@@ -92,7 +117,7 @@ export async function getAllDocuments(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al obtener el historial de documentos.' });
+    return errorResponse(res, 500, 'Error al obtener el historial de documentos.');
   }
 }
   
@@ -105,7 +130,7 @@ export async function getAllDocuments(req, res) {
         `SELECT * FROM documents WHERE id = ?`, [id]
       );
       if (docs.length === 0) {
-        return res.status(404).json({ error: 'Documento no encontrado.' });
+        return errorResponse(res, 404, 'Documento no encontrado.');
       }
   
       // Trae los resultados asociados
@@ -115,6 +140,6 @@ export async function getAllDocuments(req, res) {
       res.json({ document: docs[0], results });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Error al obtener resultados.' });
-    }
+      return errorResponse(res, 500, 'Error al obtener resultados.');
+      }
   }

@@ -4,9 +4,10 @@ import { useDropzone } from 'react-dropzone';
 import { Button, Typography, Card, CardContent, CircularProgress, Snackbar, Alert as MuiAlert, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { uploadAndAnalyze } from '../../services/api';
-import FilePreview from './FilePreview';
+import FilePreview from '../../pages/FilePreview';
 import { useLanguage, LANG_OPTIONS } from '../../context/LanguageContext';
 import useT from '../../i18n/useT';
+import useApiError from '../../hooks/useApiError';
 
 const ALLOWED_TYPES = [
   'application/pdf',
@@ -24,11 +25,13 @@ const Analyze = () => {
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(false);
   const t = useT();
+  const getApiErrorMessage = useApiError();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => handleFileChange(acceptedFiles[0]),
     onDropRejected: () => {
-      setError(t('error'));
+      const msg = getApiErrorMessage(error);
+      setError(msg);  
       setShowError(true);
     },
     multiple: false,
@@ -43,14 +46,16 @@ const Analyze = () => {
     if (!file) return;
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setError(t('error'));
+      const msg = getApiErrorMessage(error);
+      setError(msg);  
       setFile(null);
       setShowError(true);
       return;
     }
 
     if (file.size > MAX_SIZE) {
-      setError(t('error'));
+      const msg = getApiErrorMessage(error);
+      setError(msg);  
       setFile(null);
       setShowError(true);
       return;
@@ -75,7 +80,8 @@ const Analyze = () => {
       const { documentId } = await uploadAndAnalyze(file, lang);
       navigate(`/results/${documentId}`);
     } catch (err) {
-      setError(t('error'));
+      const msg = getApiErrorMessage(error);
+      setError(msg);
       setShowError(true);
     } finally {
       setLoading(false);
@@ -131,7 +137,7 @@ const Analyze = () => {
           </Button>
           {error && (
             <MuiAlert severity="error" sx={{ mt: 2 }}>
-              {t('error')}
+              {getApiErrorMessage(error)} 
             </MuiAlert>
           )}
         </CardContent>
@@ -144,7 +150,7 @@ const Analyze = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <MuiAlert severity="error" onClose={() => setShowError(false)} sx={{ width: '100%' }}>
-          {t('error')}
+          {getApiErrorMessage(error)}
         </MuiAlert>
       </Snackbar>
     </div>

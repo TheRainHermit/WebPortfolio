@@ -9,7 +9,7 @@ import Results from './pages/Results';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import NotFound from './pages/NotFound/NotFound';
-import DocumentsList from './pages/Documents/DocumentsList';
+import Documents from './pages/Documents';
 import './App.css';
 
 // Personalización del tema
@@ -262,7 +262,7 @@ function App() {
             <Route path="/" element={<Home />} />
               <Route path="/analyze" element={<Analyze />} />
               <Route path="/results/:id" element={<Results />} />
-              <Route path="/documents" element={<DocumentsList />} />
+              <Route path="/documents" element={<Documents />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/404" element={<NotFound />} />

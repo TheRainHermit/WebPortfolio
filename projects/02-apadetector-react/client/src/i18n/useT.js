@@ -6,7 +6,12 @@ function interpolate(str, vars = {}) {
   return str.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
 }
 
-export function useT() {
+// Permite acceder a claves anidadas tipo 'footer.title'
+function getNested(obj, path) {
+    return path.split('.').reduce((o, k) => (o || {})[k], obj);
+}
+
+export default function useT() {
   const { lang } = useLanguage();
   /**
    * @param {string} key - clave del texto
@@ -14,7 +19,8 @@ export function useT() {
    * @returns {string}
    */
   const t = (key, vars) => {
-    const text = I18N[lang]?.[key] || I18N['es']?.[key] || key;
+    let text = getNested(I18N[lang], key) || getNested(I18N['es'], key);
+    if (typeof text !== 'string') text = key;
     return vars ? interpolate(text, vars) : text;
   };
   return t;

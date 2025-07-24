@@ -1,6 +1,12 @@
 import express, { json } from 'express';
 import cors from 'cors';
-import analysisRoutes from './routes/analysisRoutes';
+import analysisRoutes from './routes/analysisRoutes.js';
+import { errorResponse } from './utils/errors.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -12,10 +18,14 @@ app.use(json());
 // Rutas
 app.use('/api/analyze', analysisRoutes);
 
-// Manejo de errores básicos
+// Middleware global de errores
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Error interno del servidor' });
+  if (err.code && err.message) {
+    // Error personalizado (como MulterCustomError)
+    return errorResponse(res, err.code, err.message, err.details || {}, err.status || 500);
+  }
+  // Error genérico
+  return errorResponse(res, 'INTERNAL_SERVER_ERROR', 'Error interno del servidor.', {}, 500);
 });
 
 // Inicio del servidor

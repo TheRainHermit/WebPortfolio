@@ -52,7 +52,7 @@ const Footer = () => {
 
       <div className="footer-bottom">
         <p className="footer-copyright">
-          &copy; {currentYear} {t('footer.copyright')}. Todos los derechos reservados.
+          &copy; {currentYear} Miguel Angel Fabra Montaño - TheRainHermit. {t('footer.copyright')}.
         </p>
       </div>
     </footer>

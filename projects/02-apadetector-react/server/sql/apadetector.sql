@@ -35,3 +35,5 @@ CREATE TABLE IF NOT EXISTS error_logs (
     stack_trace TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE analysis_results ADD COLUMN section VARCHAR(255) DEFAULT NULL;

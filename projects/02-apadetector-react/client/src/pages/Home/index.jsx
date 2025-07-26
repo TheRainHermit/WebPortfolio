@@ -1,120 +1,132 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Box, 
-  Button, 
-  Container, 
-  Grid, 
-  Typography, 
-  Paper,
+import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
   Card,
   CardContent,
-  CardActions,
+  Container,
+  Grid,
+  Typography,
   useTheme
 } from '@mui/material';
 import {
   Description as DescriptionIcon,
   CheckCircle as CheckCircleIcon,
+  PictureAsPdf as PictureAsPdfIcon,
   Speed as SpeedIcon,
   School as SchoolIcon
 } from '@mui/icons-material';
-import './Home.css';
+import useT from '../../i18n/useT';
 
 const features = [
   {
-    icon: <CheckCircleIcon color="primary" sx={{ fontSize: 50 }} />,
-    title: 'Análisis Preciso',
-    description: 'Detecta automáticamente errores en el formato APA de tu documento.'
+    icon: <DescriptionIcon color="primary" sx={{ fontSize: 50 }} />,
+    titleKey: 'landing.benefit1',
+    descKey: 'landing.benefit1Desc'
   },
   {
-    icon: <SpeedIcon color="primary" sx={{ fontSize: 50 }} />,
-    title: 'Rápido y Eficiente',
-    description: 'Analiza documentos en segundos y obtén resultados inmediatos.'
+    icon: <CheckCircleIcon color="success" sx={{ fontSize: 50 }} />,
+    titleKey: 'landing.benefit2',
+    descKey: 'landing.benefit2Desc'
+  },
+  {
+    icon: <SpeedIcon color="secondary" sx={{ fontSize: 50 }} />,
+    titleKey: 'landing.benefit3',
+    descKey: 'landing.benefit3Desc'
   },
   {
     icon: <SchoolIcon color="primary" sx={{ fontSize: 50 }} />,
-    title: 'Aprendizaje Mejorado',
-    description: 'Aprende las reglas APA con nuestras explicaciones detalladas.'
+    titleKey: 'landing.benefit4',
+    descKey: 'landing.benefit4Desc'
+  },
+  {
+    icon: <PictureAsPdfIcon color="primary" sx={{ fontSize: 50 }} />,
+    titleKey: 'landing.benefit5',
+    descKey: 'landing.benefit5Desc'
   }
 ];
 
-const Home = () => {
+export default function Home() {
   const theme = useTheme();
+  const t = useT();
+  const navigate = useNavigate();
 
   return (
-    <Box className="home-container">
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pt: { xs: 4, md: 8 } }}>
       {/* Hero Section */}
-      <Box className="hero-section" sx={{ 
-        bgcolor: 'primary.main',
-        color: 'primary.contrastText',
-        py: 10,
-        textAlign: 'center'
-      }}>
-        <Container maxWidth="md">
-          <Typography variant="h2" component="h1" gutterBottom>
-            Verifica el Formato APA de tus Documentos
+      <Container maxWidth="md" sx={{ mb: 8 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: { xs: '40vh', md: '60vh' },
+            textAlign: 'center',
+            py: 0,
+          }}
+        >
+          {/* Puedes poner aquí tu logo o ilustración */}
+          <img
+            src="/APADetector.png"
+            alt="APA Detector"
+            style={{ width: 250, marginBottom: 20 }}
+            loading="lazy"
+          />
+          <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', fontSize: { xs: '2.1rem', md: '3rem' } }}>
+            {t('landing.title')}
           </Typography>
-          <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4, opacity: 0.9 }}>
-            Asegúrate de que tus trabajos académicos cumplan con las normas APA de manera fácil y rápida.
+          <Typography variant="h5" color="text.secondary" mb={3}>
+            {t('landing.subtitle')}
           </Typography>
-          <Button
-            component={Link}
-            to="/analyze"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ 
-              mt: 2,
-              px: 4,
-              py: 1.5,
-              fontSize: '1.1rem',
-              textTransform: 'none',
-              borderRadius: 2,
-              boxShadow: 3,
-              '&:hover': {
-                boxShadow: 6,
-                transform: 'translateY(-2px)',
-                transition: 'all 0.3s ease'
-              }
-            }}
-          >
-            Analizar Documento
-          </Button>
-        </Container>
-      </Box>
+          <Box>
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              sx={{ mr: 2, minWidth: 180 }}
+              onClick={() => navigate('/analyze')}
+            >
+              {t('landing.cta')}
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              color="primary"
+              onClick={() => navigate('/documents')}
+            >
+              {t('landing.ctaSecondary')}
+            </Button>
+          </Box>
+        </Box>
+      </Container>
 
       {/* Features Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Typography variant="h4" component="h2" align="center" gutterBottom>
-          Características Principales
-        </Typography>
-        <Typography variant="subtitle1" color="textSecondary" align="center" sx={{ mb: 6, maxWidth: 700, mx: 'auto' }}>
-          Nuestra herramienta está diseñada para hacer que el formateo APA sea sencillo y sin complicaciones.
-        </Typography>
-        
-        <Grid container spacing={4}>
-          {features.map((feature, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Card 
-                elevation={2} 
-                sx={{ 
+      <Container maxWidth="lg" sx={{ mb: 8 }}>
+        <Grid container spacing={4} justifyContent="center">
+          {features.map((feature, idx) => (
+            <Grid item xs={12} sm={6} md={4} key={idx}>
+              <Card
+                sx={{
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: 6
-                  }
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: 2,
+                  borderRadius: 4,
+                  transition: 'transform 0.2s',
+                  '&:hover': { transform: 'scale(1.04)' }
                 }}
               >
                 <CardContent sx={{ flexGrow: 1, textAlign: 'center', py: 4 }}>
                   <Box sx={{ mb: 2 }}>{feature.icon}</Box>
                   <Typography variant="h5" component="h3" gutterBottom>
-                    {feature.title}
+                    {t(feature.titleKey)}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {feature.description}
+                    {t(feature.descKey)}
                   </Typography>
                 </CardContent>
               </Card>
@@ -122,48 +134,6 @@ const Home = () => {
           ))}
         </Grid>
       </Container>
-
-      {/* CTA Section */}
-      <Box sx={{ 
-        bgcolor: 'background.paper',
-        py: 8,
-        borderTop: `1px solid ${theme.palette.divider}`,
-        borderBottom: `1px solid ${theme.palette.divider}`
-      }}>
-        <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-          <DescriptionIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
-          <Typography variant="h4" component="h2" gutterBottom>
-            ¿Listo para comenzar?
-          </Typography>
-          <Typography variant="body1" color="textSecondary" sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}>
-            Sube tu documento ahora y obtén un análisis detallado de su conformidad con las normas APA.
-          </Typography>
-          <Button
-            component={Link}
-            to="/analyze"
-            variant="contained"
-            color="primary"
-            size="large"
-            sx={{ 
-              px: 4,
-              py: 1.5,
-              fontSize: '1.1rem',
-              textTransform: 'none',
-              borderRadius: 2,
-              boxShadow: 3,
-              '&:hover': {
-                boxShadow: 6,
-                transform: 'translateY(-2px)',
-                transition: 'all 0.3s ease'
-              }
-            }}
-          >
-            Comenzar Análisis
-          </Button>
-        </Container>
-      </Box>
     </Box>
   );
-};
-
-export default Home;
+}

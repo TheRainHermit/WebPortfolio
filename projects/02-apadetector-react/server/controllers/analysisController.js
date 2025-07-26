@@ -8,6 +8,7 @@ import { errorResponse } from '../utils/errors.js';
 
 export async function analyzeDocument(req, res) {
   try {
+    console.log('req.file:', req.file);
     // Verificar que se haya enviado un archivo
     if (!req.file) {
       return errorResponse(res, 400, 'No se envió ningún archivo o el archivo no es válido.');
@@ -21,22 +22,26 @@ export async function analyzeDocument(req, res) {
     );
     const documentId = docResult.insertId;
 
-    // 2. Analizar archivo
-    const analysisResults = await analyzeFile(req.file.path);
+    // 2. Analizar archivo (ahora retorna { results, pieChartData, sectionChartData })
+    const analysis = await analyzeFile(req.file.path, req.file.mimetype);
+    console.log('ANALYSIS:', analysis);
 
-    console.log('analysisResults:', analysisResults);
+    if (!analysis || !Array.isArray(analysis.results)) {
+      return errorResponse(res, 500, 'Error interno: análisis inválido');
+    }
 
     // 3. Guardar resultados
-    const insertPromises = analysisResults.map(result =>
+    const insertPromises = analysis.results.map(result =>
       pool.query(
-        `INSERT INTO analysis_results (document_id, type, title, message, suggestion)
-         VALUES (?, ?, ?, ?, ?)`,
+        `INSERT INTO analysis_results (document_id, type, title, message, suggestion, section)
+         VALUES (?, ?, ?, ?, ?, ?)`,
         [
           documentId,
           result.type,
           result.title,
           result.message,
-          result.suggestion || null
+          result.suggestion || null,
+          result.section || null
         ]
       )
     );
@@ -45,8 +50,18 @@ export async function analyzeDocument(req, res) {
     // 4. Eliminar archivo temporal
     unlinkSync(req.file.path);
 
-    // 5. Responder con resultados y documentId
-    res.json({ documentId, results: analysisResults });
+    // 5. Responder con resultados, gráficas e info del documento
+    res.json({
+      documentId,
+      results: analysis.results,
+      pieChartData: analysis.pieChartData,
+      sectionChartData: analysis.sectionChartData,
+      docInfo: {
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size
+      }
+    });
 
   } catch (error) {
     if (error instanceof multer.MulterError) {
@@ -122,24 +137,55 @@ export async function getAllDocuments(req, res) {
 }
   
   // Obtener resultados de un documento específico
-  export async function getAnalysisResults(req, res) {
-    const { id } = req.params;
-    try {
-      // Verifica que el documento exista
-      const [docs] = await pool.query(
-        `SELECT * FROM documents WHERE id = ?`, [id]
-      );
-      if (docs.length === 0) {
-        return errorResponse(res, 404, 'Documento no encontrado.');
+export async function getAnalysisResults(req, res) {
+  const { id } = req.params;
+  try {
+    // Verifica que el documento exista
+    const [docs] = await pool.query(
+      `SELECT * FROM documents WHERE id = ?`, [id]
+    );
+    if (docs.length === 0) {
+      return errorResponse(res, 404, 'Documento no encontrado.');
+    }
+
+    // Trae los resultados asociados
+    const [results] = await pool.query(
+      `SELECT * FROM analysis_results WHERE document_id = ? ORDER BY created_at ASC`, [id]
+    );
+
+    // --- Calcula los datos para las gráficas ---
+    const typeCount = {};
+    const sectionCount = {};
+    results.forEach(r => {
+      typeCount[r.type] = (typeCount[r.type] || 0) + 1;
+      if (r.section) sectionCount[r.section] = (sectionCount[r.section] || 0) + 1;
+    });
+    const pieChartData = Object.entries(typeCount).map(([name, value]) => ({ name, value }));
+    const sectionChartData = Object.entries(sectionCount).map(([section, count]) => ({ section, count }));
+
+    // --- Chequeo: solo responde si hay resultados y datos de sección ---
+    if (!results || results.length === 0 || !sectionChartData || sectionChartData.length === 0) {
+      // Puedes devolver un status 202 (Accepted) para indicar que el análisis está en curso
+      return res.status(202).json({
+        status: 'processing',
+        message: 'El análisis está en curso. Intenta nuevamente en unos segundos.'
+      });
+    }
+
+    // --- Responde con todo lo necesario ---
+    res.json({
+      document: docs[0],
+      results,
+      pieChartData,
+      sectionChartData,
+      docInfo: {
+        originalname: docs[0].originalname,
+        mimetype: docs[0].mimetype,
+        size: docs[0].size
       }
-  
-      // Trae los resultados asociados
-      const [results] = await pool.query(
-        `SELECT * FROM analysis_results WHERE document_id = ? ORDER BY created_at ASC`, [id]
-      );
-      res.json({ document: docs[0], results });
-    } catch (error) {
-      console.error(error);
-      return errorResponse(res, 500, 'Error al obtener resultados.');
-      }
+    });
+  } catch (error) {
+    console.error(error);
+    return errorResponse(res, 500, 'Error al obtener resultados.');
   }
+}

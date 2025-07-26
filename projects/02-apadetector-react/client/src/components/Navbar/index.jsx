@@ -59,7 +59,7 @@ const Navbar = () => {
     return (
         <AppBar position="sticky" elevation={1} color="default">
             <Toolbar>
-                <DescriptionIcon sx={{ mr: 1, color: 'primary.main' }} />
+                <img src="/APAicon.png" alt="APA icono" width={40} height={40}/>
                 <Typography
                     variant="h6"
                     component={Link}

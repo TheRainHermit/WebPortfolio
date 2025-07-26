@@ -1,5 +1,24 @@
 const I18N = {
   es: {
+
+    //Landing Page:
+    landing: {
+      title: "Verifica el Formato APA de tus Documentos",
+      subtitle: "Asegúrate de que tus trabajos académicos cumplan con las normas APA de manera fácil y rápida.",
+      cta: "Analizar documento",
+      ctaSecondary: "Ver historial",
+      benefit1: "Análisis Automático",
+      benefit1Desc: "Detecta errores y sugerencias en tus documentos al instante.",
+      benefit2: "Resultados Confiables",
+      benefit2Desc: "Cumple con la 7ma edición de normas APA.",
+      benefit3: "Rápido y Fácil",
+      benefit3Desc: "Sube tu archivo y obtén resultados en segundos.",
+      benefit4: "Aprendizaje Mejorado",
+      benefit4Desc: "Aprende las reglas APA con nuestras explicaciones detalladas.",
+      benefit5: "Formato PDF",
+      benefit5Desc: "Analiza documentos en PDF y obtén resultados inmediatos."
+    },
+
     // General / Navegación
     appTitle: 'APADetector',
     analyze: 'Analizar',
@@ -32,6 +51,7 @@ const I18N = {
     analyzeError: 'Error al analizar el documento',
     removeFile: 'Eliminar archivo',
     language: 'Idioma del análisis',
+    analyzeNewDoc: 'Analizar un nuevo documento',
 
     // Results Page
     resultsTitle: 'Resultados del Análisis',
@@ -55,6 +75,11 @@ const I18N = {
     section: 'Sección',
     suggestion: 'Sugerencia',
     noResults: 'No se encontraron resultados para este documento.',
+    noSectionChartData: 'No se encontraron datos por sección.',
+    processingResults: 'El análisis está en curso. Espera unos segundos...',
+    analysisComplete: '¡Análisis completado exitosamente!',
+    typeDistributionAlt: 'Gráfico de pastel que muestra la cantidad de advertencias, sugerencias e información detectadas en el análisis.',
+sectionResultsAlt: 'Gráfico de barras que muestra la cantidad de hallazgos por sección del documento.',
 
     // Documents Page
     documentsTitle: 'Mis Documentos Analizados',
@@ -112,6 +137,24 @@ const I18N = {
     },
   },
   en: {
+    //Landing Page
+    landing: {
+      title: "Check the APA Format of Your Documents",
+      subtitle: "Make sure your academic papers comply with APA standards easily and quickly.",
+      cta: "Analyze Document",
+      ctaSecondary: "View History",
+      benefit1: "Automatic Analysis",
+      benefit1Desc: "Detects errors and suggestions in your documents instantly.",
+      benefit2: "Reliable Results",
+      benefit2Desc: "Complies with the 7th edition of APA standards.",
+      benefit3: "Fast and Easy",
+      benefit3Desc: "Upload your file and get results in seconds.",
+      benefit4: "Enhanced Learning",
+      benefit4Desc: "Learn APA rules with our detailed explanations.",
+      benefit5: "PDF Format",
+      benefit5Desc: "Analyze PDF documents and get instant results."
+    },
+
     // General / Navigation
     appTitle: 'APADetector',
     analyze: 'Analyze',
@@ -144,6 +187,11 @@ const I18N = {
     analyzeError: 'Error analyzing the document',
     removeFile: 'Remove file',
     language: 'Analysis language',
+    analyzeNewDoc: 'Analyze a new document',
+    noSectionChartData: 'No section data found.',
+    processingResults: 'The analysis is in progress. Please wait a moment...',
+    typeDistributionAlt: 'Pie chart showing the number of warnings, suggestions, and information detected in the analysis.',
+    sectionResultsAlt: 'Bar chart showing the number of findings per document section.',
 
     // Results Page
     resultsTitle: 'Analysis Results',
@@ -167,6 +215,7 @@ const I18N = {
     section: 'Section',
     suggestion: 'Suggestion',
     noResults: 'No results found for this document.',
+    analysisComplete: 'Analysis completed successfully!',
 
     // Documents Page
     documentsTitle: 'My Analyzed Documents',

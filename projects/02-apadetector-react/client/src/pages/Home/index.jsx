@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import docApproval from '../../assets/lottie/document-approval.json';
+const animCopy = JSON.parse(JSON.stringify(docApproval));
 import {
   Box,
   Button,
@@ -53,7 +56,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pt: { xs: 4, md: 8 } }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pt: { xs: 4, md: 0 } }}>
       {/* Hero Section */}
       <Container maxWidth="md" sx={{ mb: 8 }}>
         <Box
@@ -62,17 +65,19 @@ export default function Home() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: { xs: '40vh', md: '60vh' },
+            minHeight: { xs: '40vh', md: '40vh' },
+            mt: 0,
+            mb: 0,
             textAlign: 'center',
-            py: 0,
           }}
         >
           {/* Puedes poner aquí tu logo o ilustración */}
-          <img
-            src="/APADetector.png"
-            alt="APA Detector"
-            style={{ width: 250, marginBottom: 20 }}
-            loading="lazy"
+          <Lottie
+            animationData={animCopy}
+            loop={true}
+            style={{ width: 220, height: 220, marginBottom: 14 }}
+            aria-label="Animación de documento aprobado"
+            title="Animación de documento aprobado"
           />
           <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', fontSize: { xs: '2.1rem', md: '3rem' } }}>
             {t('landing.title')}
@@ -89,14 +94,6 @@ export default function Home() {
               onClick={() => navigate('/analyze')}
             >
               {t('landing.cta')}
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              color="primary"
-              onClick={() => navigate('/documents')}
-            >
-              {t('landing.ctaSecondary')}
             </Button>
           </Box>
         </Box>

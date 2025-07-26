@@ -51,7 +51,7 @@ export default function Results() {
 
   useEffect(() => {
     setError('');
-    console.log('[useEffect] Triggered for id:', id, 'lang:', lang);
+    //console.log('[useEffect] Triggered for id:', id, 'lang:', lang);
     async function fetchResults() {
       setLoading(true);
       try {
@@ -70,7 +70,7 @@ export default function Results() {
           setTimeout(() => setPollCount(c => c + 1), 1200);
         }
         // (Opcional: logs de depuración)
-        console.log('[fetchResults] API FULL DATA:', data);
+        //console.log('[fetchResults] API FULL DATA:', data);
       } catch (err) {
         // Si el backend responde con status 202 (processing)
         if (err && err.response && err.response.status === 202) {

@@ -8,7 +8,7 @@ import { errorResponse } from '../utils/errors.js';
 
 export async function analyzeDocument(req, res) {
   try {
-    console.log('req.file:', req.file);
+    //console.log('req.file:', req.file);
     // Verificar que se haya enviado un archivo
     if (!req.file) {
       return errorResponse(res, 400, 'No se envió ningún archivo o el archivo no es válido.');
@@ -24,7 +24,7 @@ export async function analyzeDocument(req, res) {
 
     // 2. Analizar archivo (ahora retorna { results, pieChartData, sectionChartData })
     const analysis = await analyzeFile(req.file.path, req.file.mimetype);
-    console.log('ANALYSIS:', analysis);
+    //console.log('ANALYSIS:', analysis);
 
     if (!analysis || !Array.isArray(analysis.results)) {
       return errorResponse(res, 500, 'Error interno: análisis inválido');

@@ -383,11 +383,11 @@ export async function analyzeFile(filePath, mimetype, lang = 'es') {
 // Solo buscar en las primeras 25 líneas de portadaLines
 const universidadCandidates = portadaLines.slice(0, 25).filter(l => universidadRegex.test(l));
 detected.universidad = universidadCandidates.length > 0 ? universidadCandidates[universidadCandidates.length - 1] : null;
-  console.log('Universidad detectada:', detected.universidad);
+  //console.log('Universidad detectada:', detected.universidad);
 
   // Facultad (o variantes)
   detected.facultad = portadaLines.find(l => /(facultad|departamento|escuela|instituto)/i.test(l));
-  console.log('Facultad/variante detectada:', detected.facultad);
+  //console.log('Facultad/variante detectada:', detected.facultad);
 
   // Título: línea larga en mayúsculas, no sea universidad/facultad
   detected.titulo = portadaLines.find(l =>
@@ -395,7 +395,7 @@ detected.universidad = universidadCandidates.length > 0 ? universidadCandidates[
     l === l.toUpperCase() &&
     !/universidad|facultad|departamento|escuela|instituto/i.test(l)
   );
-  console.log('Título detectado:', detected.titulo);
+  //console.log('Título detectado:', detected.titulo);
 
   // Autores: SOLO en las primeras 20 líneas, líneas cortas (2-5 palabras), sin instituciones
   const forbiddenAuthorWords = [
@@ -432,7 +432,7 @@ detected.universidad = universidadCandidates.length > 0 ? universidadCandidates[
   });
   // Filtra autores únicos
   detected.autores = Array.from(new Set(detected.autores));
-  console.log('Autores detectados:', detected.autores);
+  //console.log('Autores detectados:', detected.autores);
 
   function limpiarLinea(l) {
     return l.replace(/\s+/g, ' ').trim().toUpperCase();
@@ -444,7 +444,7 @@ detected.universidad = universidadCandidates.length > 0 ? universidadCandidates[
     return /\b(20\d{2}|19\d{2})\b/.test(norm) ||
       /\b\d{1,2} DE [A-ZÁÉÍÓÚÑ]+ DE \d{4}\b/.test(norm);
   });
-  console.log('Fecha detectada:', detected.fecha);
+  //console.log('Fecha detectada:', detected.fecha);
 
   // Puedes usar detected.universidad, detected.facultad, etc. para validar y armar los warnings.
 

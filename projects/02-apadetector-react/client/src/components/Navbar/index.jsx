@@ -33,7 +33,6 @@ const Navbar = () => {
     const menuItems = [
         { text: t('home'), path: '/' },
         { text: t('analyze'), path: '/analyze' },
-        { text: t('documents'), path: '/documents' },
         { text: t('about'), path: '/about' },
         { text: t('contact'), path: '/contact' },
     ];

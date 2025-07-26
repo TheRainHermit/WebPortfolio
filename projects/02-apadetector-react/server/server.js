@@ -2,8 +2,13 @@ import express, { json } from 'express';
 import cors from 'cors';
 import analysisRoutes from './routes/analysisRoutes.js';
 import { errorResponse } from './utils/errors.js';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,3 +37,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Servidor APA Detector backend corriendo en puerto ${PORT}`);
 });
+
+export default app;
